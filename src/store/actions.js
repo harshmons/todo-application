@@ -114,7 +114,7 @@ const addTaskList = () => ({
     primaryActionName: 'Add',
     primaryActionCallback: createTaskList,
     secondaryActionName: 'Cancel',
-    secondaryActionCallback: null,
+    secondaryActionCallback: hideModal,
   },
 });
 
@@ -155,16 +155,17 @@ const removeTaskList = taskId => {
   };
 };
 
-const deleteTaskList = (taskId, taskName) => ({
+const deleteTaskList = (taskName, taskId) => ({
   type: SHOW_MODAL,
   payload: {
-    title: `Are you sure, you want to delete task ${taskName}?`,
+    title: 'Warning',
+    message: `Are you sure, you want to delete task ${taskName}?`,
     showNameInput: false,
     showDescriptionInput: false,
     primaryActionName: 'Delete',
     primaryActionCallback: removeTaskList.bind(null, taskId),
     secondaryActionName: 'Cancel',
-    secondaryActionCallback: null,
+    secondaryActionCallback: hideModal,
   },
 });
 
@@ -207,13 +208,14 @@ const removeItem = (taskId, itemId) => {
 const deleteItem = (taskId, taskName, itemId, itemName) => ({
   type: SHOW_MODAL,
   payload: {
-    title: `Are you sure, you want to delete item ${itemName} from task ${taskName}?`,
+    title: `Warning`,
+    message: `Are you sure, you want to delete item ${itemName} from task ${taskName}?`,
     showNameInput: false,
     showDescriptionInput: false,
     primaryActionName: 'Delete',
     primaryActionCallback: removeItem.bind(null, taskId, itemId),
     secondaryActionName: 'Cancel',
-    secondaryActionCallback: null,
+    secondaryActionCallback: hideModal,
   },
 });
 
@@ -262,7 +264,7 @@ const addItem = (taskName, taskId) => ({
     primaryActionName: 'Add',
     primaryActionCallback: createItem.bind(null, taskId),
     secondaryActionName: 'Cancel',
-    secondaryActionCallback: null,
+    secondaryActionCallback: hideModal,
   },
 });
 

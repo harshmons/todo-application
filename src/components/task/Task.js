@@ -3,7 +3,6 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
-import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ItemContainer from '../item/ItemContainer';
 import CancelIcon from '@material-ui/icons/Cancel';
@@ -25,32 +24,25 @@ const Task = props => {
     <div
       onDragOver={allowDrop}
       onDrop={drop.bind(null, detail.id, onDraggedItem)}
+      className={classes.root}
     >
-      <Card className={classes.root} variant="outlined">
-        <Grid container>
-          <Grid item xs={11}>
-            <CardHeader title={detail.name} subheader={detail.description} />
-          </Grid>
-          <Grid item xs={1}>
-            <CancelIcon
-              onClick={onDeleteTask.bind(null, detail.id, detail.name)}
-            />
-          </Grid>
-        </Grid>
+      <Card className={classes.card} variant="outlined">
+        <CancelIcon
+          className={classes.cancel}
+          onClick={onDeleteTask.bind(null, detail.name, detail.id)}
+        />
+        <CardHeader title={detail.name} subheader={detail.description} />
         <CardContent>
-          {
-            // ITEMS
-            detail.items.map(item => {
-              return (
-                <ItemContainer
-                  key={item.id}
-                  detail={item}
-                  taskId={detail.id}
-                  taskName={detail.name}
-                />
-              );
-            })
-          }
+          {detail.items.map(item => {
+            return (
+              <ItemContainer
+                key={item.id}
+                detail={item}
+                taskId={detail.id}
+                taskName={detail.name}
+              />
+            );
+          })}
         </CardContent>
         <CardActions>
           <Button

@@ -9,7 +9,7 @@ const TaskList = props => {
       <Grid container spacing={3}>
         {list.map(item => {
           return (
-            <Grid item key={item.id} xs={12} sm={6} md={4}>
+            <Grid item key={item.id} xs={12} sm={6} md={3}>
               <Task
                 detail={item}
                 onAddItem={actions.addItemHandler}

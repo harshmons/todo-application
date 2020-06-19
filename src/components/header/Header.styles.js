@@ -7,4 +7,7 @@ export default makeStyles(theme => ({
   title: {
     flexGrow: 1,
   },
+  add: {
+    cursor: 'pointer',
+  },
 }));

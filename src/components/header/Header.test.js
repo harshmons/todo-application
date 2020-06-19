@@ -2,7 +2,8 @@ import React from 'react';
 import Header from './Header';
 import { shallow } from 'enzyme';
 import AppBar from '@material-ui/core/AppBar';
-import { Toolbar, Typography, Button } from '@material-ui/core';
+import { Toolbar, Typography } from '@material-ui/core';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 
 const DEFAULT_PROPS = {
   actions: {
@@ -36,11 +37,11 @@ describe('<Header />', () => {
     expect(child.text()).toBe('TODO Application');
   });
 
-  it('should render 2nd child of <Toolbar /> as <Button /> with appropriate props', () => {
+  it('should render 2nd child of <Toolbar /> as <AddBoxIcon /> with appropriate props', () => {
     const child = shallowWrapper.children().childAt(1);
-    expect(child.type()).toBe(Button);
-    expect(child.prop('color')).toBe('inherit');
-    expect(child.text()).toBe('Add List');
+    expect(child.type()).toBe(AddBoxIcon);
+    expect(child.prop('className')).toMatch('add');
+    expect(child.prop('fontSize')).toBe('large');
 
     child.prop('onClick')();
     expect(DEFAULT_PROPS.actions.addTaskListHandler).toHaveBeenCalledTimes(1);

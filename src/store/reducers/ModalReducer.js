@@ -11,6 +11,7 @@ import {
 export const DEFAULT_STATE = Map({
   show: false,
   title: '',
+  message: '',
   showNameInput: true,
   showDescriptionInput: true,
   primaryActionName: '',

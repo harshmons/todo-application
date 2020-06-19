@@ -3,12 +3,13 @@ import MuiModal from '@material-ui/core/Modal';
 import useStyles from './Modal.styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import { Typography } from '@material-ui/core';
 
 const Modal = props => {
-  // const { show, actions, detail } = props;
   const {
     show,
     title,
+    message,
     showNameInput,
     showDescriptionInput,
     primaryActionName,
@@ -17,50 +18,66 @@ const Modal = props => {
     secondaryActionCallback,
     actions,
   } = props;
-  console.log('FROM MODAL -->', props);
   const classes = useStyles();
+
   const [name, setName] = React.useState('');
   const [desc, setDesc] = React.useState('');
 
+  const onClose = () => {
+    setName('');
+    setDesc('');
+    actions.hideModal();
+  };
+
+  const onPrimaryAction = () => {
+    setName('');
+    setDesc('');
+    actions.primaryActionHandler(
+      primaryActionCallback && primaryActionCallback.bind(null, name, desc)
+    );
+  };
+
+  const onSecondaryAction = () => {
+    actions.secondaryActionHandler(secondaryActionCallback);
+  };
+
   return (
-    <MuiModal open={show} onClose={actions.hideModal}>
+    <MuiModal open={show} onClose={onClose}>
       <div className={classes.container}>
-        <div className={classes.title}>{title}</div>
-        {showNameInput && (
-          <div>
-            <TextField
-              required
-              id="standard-required"
-              label="Name"
-              value={name}
-              onChange={e => setName(e.target.value)}
-            />
-          </div>
-        )}
-        {showDescriptionInput && (
-          <div>
-            <TextField
-              id="standard-multiline-flexible"
-              label="Description"
-              multiline
-              rowsMax={4}
-              value={desc}
-              onChange={e => {
-                setDesc(e.target.value);
-              }}
-            />
-          </div>
-        )}
-        <div className={classes.action}>
+        <Typography variant="h5">{title}</Typography>
+        <div className={classes.body}>
+          <Typography variant="h6">{message}</Typography>
+          {showNameInput && (
+            <div>
+              <TextField
+                required
+                id="standard-required"
+                label="Name"
+                value={name}
+                onChange={e => setName(e.target.value)}
+              />
+            </div>
+          )}
+          {showDescriptionInput && (
+            <div>
+              <TextField
+                id="standard-multiline-flexible"
+                label="Description"
+                multiline
+                rowsMax={4}
+                value={desc}
+                onChange={e => {
+                  setDesc(e.target.value);
+                }}
+              />
+            </div>
+          )}
+        </div>
+        <div className={classes.footer}>
           <Button
             variant="contained"
             disabled={showNameInput && !name.length}
-            onClick={() =>
-              actions.primaryActionHandler(
-                primaryActionCallback &&
-                  primaryActionCallback.bind(null, name, desc)
-              )
-            }
+            onClick={onPrimaryAction}
             color="primary"
           >
             {primaryActionName}
@@ -68,9 +85,7 @@ const Modal = props => {
           <Button
             variant="contained"
             color="secondary"
-            onClick={() =>
-              actions.secondaryActionHandler(secondaryActionCallback)
-            }
+            onClick={onSecondaryAction}
           >
             {secondaryActionName}
           </Button>

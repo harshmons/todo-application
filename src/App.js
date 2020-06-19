@@ -1,5 +1,5 @@
 import React from 'react';
-import TaskListContainer from './components/task_list/TaskListContainer';
+import TaskListContainer from './components/taskList/TaskListContainer';
 import useStyles from './App.styles';
 import ModalContainer from './components/modal/ModalContainer';
 import HeaderContainer from './components/header/HeaderContainer';

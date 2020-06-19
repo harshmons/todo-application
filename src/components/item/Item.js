@@ -7,7 +7,6 @@ import Grid from '@material-ui/core/Grid';
 import useStyles from './Item.styles';
 
 const drag = (itemDetail, taskId, e) => {
-  console.log('DRAGG STARTED --->', e.target.id);
   e.dataTransfer.setData('detail', JSON.stringify({ itemDetail, taskId }));
 };
 

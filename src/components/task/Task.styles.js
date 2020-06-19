@@ -2,17 +2,15 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles({
   root: {
-    width: 275,
+    position: 'relative',
   },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
+  card: {
+    width: '100%',
   },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
+  cancel: {
+    cursor: 'pointer',
+    position: 'absolute',
+    top: '2px',
+    right: '2px',
   },
 });

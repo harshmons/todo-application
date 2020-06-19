@@ -9,10 +9,10 @@ export default makeStyles(theme => ({
     padding: 30,
     top: '30%',
     left: '30%',
-    // transform: `translate(-${top}%, -${left}%)`,
   },
-  title: {},
-  action: {
+  header: {},
+  body: {},
+  footer: {
     textAlign: 'right',
     '& > *': {
       marginRight: theme.spacing(1),

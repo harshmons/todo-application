@@ -33,7 +33,8 @@ const mapDispatchToProps = dispatch => {
     actions: {
       getTaskList: () => dispatch(getTaskList()),
       addItemHandler: (taskName, taskId) => dispatch(addItem(taskName, taskId)),
-      deleteTaskHandler: taskId => dispatch(deleteTaskList(taskId)),
+      deleteTaskHandler: (taskName, taskId) =>
+        dispatch(deleteTaskList(taskName, taskId)),
       draggedItemHandler: (prevTaskId, prevItemId, newTaskId) =>
         dispatch(draggedTask(prevTaskId, prevItemId, newTaskId)),
     },

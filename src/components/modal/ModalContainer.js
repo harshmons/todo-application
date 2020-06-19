@@ -12,6 +12,7 @@ const mapStateToProps = state => {
   return {
     show: modal.get('show'),
     title: modal.get('title'),
+    message: modal.get('message'),
     showNameInput: modal.get('showNameInput'),
     showDescriptionInput: modal.get('showDescriptionInput'),
     primaryActionName: modal.get('primaryActionName'),
@@ -26,7 +27,7 @@ const mapDispatchToProps = dispatch => {
     actions: {
       hideModal: () => dispatch(hideModal()),
       primaryActionHandler: callback => callback && dispatch(callback()),
-      secondaryActionHandler: callback => dispatch(callback()),
+      secondaryActionHandler: callback => callback && dispatch(callback()),
     },
   };
 };

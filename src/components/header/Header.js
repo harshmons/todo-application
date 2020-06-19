@@ -2,7 +2,7 @@ import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import AddBoxIcon from '@material-ui/icons/AddBox';
 import useStyles from './Header.styles';
 
 const Header = props => {
@@ -14,9 +14,11 @@ const Header = props => {
         <Typography variant="h6" className={classes.title}>
           TODO Application
         </Typography>
-        <Button color="inherit" onClick={actions.addTaskListHandler}>
-          Add List
-        </Button>
+        <AddBoxIcon
+          className={classes.add}
+          onClick={actions.addTaskListHandler}
+          fontSize="large"
+        />
       </Toolbar>
     </AppBar>
   );
