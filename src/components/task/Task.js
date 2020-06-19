@@ -13,8 +13,8 @@ const allowDrop = e => {
   e.preventDefault();
 };
 const drop = (newTaskId, callback, e) => {
-  // console.log("DROP :", "TASK ID :",taskId,"DATA : ",JSON.parse(e.dataTransfer.getData("detail")));
   const { taskId, itemDetail } = JSON.parse(e.dataTransfer.getData('detail'));
+  if (taskId === newTaskId) return;
   callback(taskId, itemDetail.id, newTaskId);
 };
 
@@ -32,7 +32,9 @@ const Task = props => {
             <CardHeader title={detail.name} subheader={detail.description} />
           </Grid>
           <Grid item xs={1}>
-            <CancelIcon onClick={onDeleteTask.bind(null, detail.id)} />
+            <CancelIcon
+              onClick={onDeleteTask.bind(null, detail.id, detail.name)}
+            />
           </Grid>
         </Grid>
         <CardContent>
@@ -40,13 +42,21 @@ const Task = props => {
             // ITEMS
             detail.items.map(item => {
               return (
-                <ItemContainer key={item.id} detail={item} taskId={detail.id} />
+                <ItemContainer
+                  key={item.id}
+                  detail={item}
+                  taskId={detail.id}
+                  taskName={detail.name}
+                />
               );
             })
           }
         </CardContent>
         <CardActions>
-          <Button size="small" onClick={onAddItem.bind(null, detail.id)}>
+          <Button
+            size="small"
+            onClick={onAddItem.bind(null, detail.name, detail.id)}
+          >
             Add a card
           </Button>
         </CardActions>

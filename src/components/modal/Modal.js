@@ -2,50 +2,31 @@ import React from 'react';
 import MuiModal from '@material-ui/core/Modal';
 import useStyles from './Modal.styles';
 import Button from '@material-ui/core/Button';
-import { MODAL_TYPE } from '../../CONSTANTS';
 import TextField from '@material-ui/core/TextField';
 
-const getModalTitle = modalType => {
-  switch (modalType) {
-    case MODAL_TYPE.ADD_TASK_LIST:
-      return 'Add Task List';
-    case MODAL_TYPE.ADD_ITEM:
-      return 'Add Item';
-    case MODAL_TYPE.DELETE_ITEM:
-      return 'Deleting Item';
-    case MODAL_TYPE.DELETE_TASK_LIST:
-      return 'Deleting Task List';
-    default:
-      return '';
-  }
-};
-
-const getButtonTitle = modalType => {
-  switch (modalType) {
-    case MODAL_TYPE.ADD_TASK_LIST:
-    case MODAL_TYPE.ADD_ITEM:
-      return 'Add';
-    case MODAL_TYPE.DELETE_ITEM:
-    case MODAL_TYPE.DELETE_TASK_LIST:
-      return 'Delete';
-    default:
-      return '';
-  }
-};
-
 const Modal = props => {
-  const { show, actions, detail } = props;
+  // const { show, actions, detail } = props;
+  const {
+    show,
+    title,
+    showNameInput,
+    showDescriptionInput,
+    primaryActionName,
+    secondaryActionName,
+    primaryActionCallback,
+    secondaryActionCallback,
+    actions,
+  } = props;
+  console.log('FROM MODAL -->', props);
   const classes = useStyles();
   const [name, setName] = React.useState('');
   const [desc, setDesc] = React.useState('');
 
-  console.log('FROM MODAL -->', detail);
   return (
     <MuiModal open={show} onClose={actions.hideModal}>
       <div className={classes.container}>
-        <div className={classes.title}>{getModalTitle(detail.modalType)}</div>
-        {(detail.modalType === MODAL_TYPE.ADD_ITEM ||
-          detail.modalType === MODAL_TYPE.ADD_TASK_LIST) && (
+        <div className={classes.title}>{title}</div>
+        {showNameInput && (
           <div>
             <TextField
               required
@@ -56,7 +37,7 @@ const Modal = props => {
             />
           </div>
         )}
-        {detail.modalType === MODAL_TYPE.ADD_TASK_LIST && (
+        {showDescriptionInput && (
           <div>
             <TextField
               id="standard-multiline-flexible"
@@ -73,30 +54,25 @@ const Modal = props => {
         <div className={classes.action}>
           <Button
             variant="contained"
-            disabled={
-              (detail.modalType === MODAL_TYPE.ADD_TASK_LIST ||
-                detail.modalType === MODAL_TYPE.ADD_ITEM) &&
-              !name.length
+            disabled={showNameInput && !name.length}
+            onClick={() =>
+              actions.primaryActionHandler(
+                primaryActionCallback &&
+                  primaryActionCallback.bind(null, name, desc)
+              )
             }
-            onClick={
-              detail.modalType === MODAL_TYPE.ADD_TASK_LIST ||
-              detail.modalType === MODAL_TYPE.ADD_ITEM
-                ? actions.onAddHandler.bind(
-                    null,
-                    detail.modalType,
-                    name,
-                    desc,
-                    detail.taskId
-                  )
-                : actions.onDeleteHandler.bind(
-                    null,
-                    detail.modalType,
-                    detail.taskId,
-                    detail.itemId
-                  )
+            color="primary"
+          >
+            {primaryActionName}
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() =>
+              actions.secondaryActionHandler(secondaryActionCallback)
             }
           >
-            {getButtonTitle(detail.modalType)}
+            {secondaryActionName}
           </Button>
         </div>
       </div>

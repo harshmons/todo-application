@@ -14,5 +14,8 @@ export default makeStyles(theme => ({
   title: {},
   action: {
     textAlign: 'right',
+    '& > *': {
+      marginRight: theme.spacing(1),
+    },
   },
 }));

@@ -1,8 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import TaskList from './TaskList';
-import { getTaskList, showModal, draggedTask } from '../../store/actions';
-import { MODAL_TYPE } from '../../CONSTANTS';
+import {
+  getTaskList,
+  draggedTask,
+  addItem,
+  deleteTaskList,
+} from '../../store/actions';
 
 class TaskListContainer extends React.Component {
   componentDidMount() {
@@ -28,11 +32,9 @@ const mapDispatchToProps = dispatch => {
   return {
     actions: {
       getTaskList: () => dispatch(getTaskList()),
-      onAddItemHandler: taskId =>
-        dispatch(showModal({ modalType: MODAL_TYPE.ADD_ITEM, taskId })),
-      onDeleteTaskHandler: taskId =>
-        dispatch(showModal({ modalType: MODAL_TYPE.DELETE_TASK_LIST, taskId })),
-      onDraggedTaskHandler: (prevTaskId, prevItemId, newTaskId) =>
+      addItemHandler: (taskName, taskId) => dispatch(addItem(taskName, taskId)),
+      deleteTaskHandler: taskId => dispatch(deleteTaskList(taskId)),
+      draggedItemHandler: (prevTaskId, prevItemId, newTaskId) =>
         dispatch(draggedTask(prevTaskId, prevItemId, newTaskId)),
     },
   };

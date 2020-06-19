@@ -10,7 +10,13 @@ import {
 
 export const DEFAULT_STATE = Map({
   show: false,
-  detail: Map({}),
+  title: '',
+  showNameInput: true,
+  showDescriptionInput: true,
+  primaryActionName: '',
+  primaryActionCallback: null,
+  secondaryActionName: '',
+  secondaryActionCallback: null,
 });
 
 export default function (state = DEFAULT_STATE, action) {
@@ -19,23 +25,15 @@ export default function (state = DEFAULT_STATE, action) {
       const { payload } = action;
       return state.merge({
         show: true,
-        detail: Map({
-          modalType: payload.modalType,
-          taskId: payload.taskId,
-          itemId: payload.itemId,
-        }),
+        ...payload,
       });
     }
     case ADD_TASK_LIST_SUCCESS:
     case ADD_ITEM_SUCCESS:
     case DELETE_TASK_LIST_SUCCESS:
     case DELETE_ITEM_SUCCESS:
-    case HIDE_MODAL: {
-      return state.merge({
-        show: false,
-        detail: Map({}),
-      });
-    }
+    case HIDE_MODAL:
+      return DEFAULT_STATE;
     default:
       return state;
   }

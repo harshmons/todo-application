@@ -1,6 +1,6 @@
 import { List, Map } from 'immutable';
 
-const swapItem = (prevTaskId, prevItemId, newTaskId, state) => {
+const moveItemToAnotherTask = (prevTaskId, prevItemId, newTaskId, state) => {
   let prevTaskIndex = 0;
   const prevTask = state.get('taskList').find((val, index) => {
     if (val.get('id') === prevTaskId) {
@@ -89,7 +89,7 @@ const deleteItemFromATask = (taskId, itemId, state) => {
 };
 
 export {
-  swapItem,
+  moveItemToAnotherTask,
   addNewTaskInTaskList,
   addItemInATask,
   deleteTaskFromTaskList,

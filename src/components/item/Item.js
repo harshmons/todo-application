@@ -12,7 +12,7 @@ const drag = (itemDetail, taskId, e) => {
 };
 
 const Item = props => {
-  const { detail, taskId, actions } = props;
+  const { detail, taskId, taskName, actions } = props;
   const classes = useStyles();
   return (
     <div
@@ -34,7 +34,9 @@ const Item = props => {
                 onClick={actions.deleteItemHandler.bind(
                   null,
                   taskId,
-                  detail.id
+                  taskName,
+                  detail.id,
+                  detail.name
                 )}
               />
             </Grid>

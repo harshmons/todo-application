@@ -12,9 +12,9 @@ const TaskList = props => {
             <Grid item key={item.id} xs={12} sm={6} md={4}>
               <Task
                 detail={item}
-                onAddItem={actions.onAddItemHandler}
-                onDraggedItem={actions.onDraggedTaskHandler}
-                onDeleteTask={actions.onDeleteTaskHandler}
+                onAddItem={actions.addItemHandler}
+                onDraggedItem={actions.draggedItemHandler}
+                onDeleteTask={actions.deleteTaskHandler}
               />
             </Grid>
           );

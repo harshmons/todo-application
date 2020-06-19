@@ -20,13 +20,12 @@ import {
   DELETE_ITEM_SUCCESS,
   DELETE_ITEM_FAILURE,
 } from './action_types';
-import { MODAL_TYPE } from '../CONSTANTS';
 import {
   getTaskList as getTaskListApi,
   updateTaskList as updateTaskListAPI,
 } from '../services/api';
 import {
-  swapItem,
+  moveItemToAnotherTask,
   addNewTaskInTaskList,
   addItemInATask,
   deleteTaskFromTaskList,
@@ -70,155 +69,200 @@ const hideModal = () => ({
   type: HIDE_MODAL,
 });
 
-const modalAddAction = (modalType, name, desc, taskId) => {
+const createTaskList = (name, description) => {
   return (dispatch, getState) => {
-    if (modalType === MODAL_TYPE.ADD_TASK_LIST) {
-      dispatch({
-        type: ADD_TASK_LIST,
-      });
-      const updatedTaskList = addNewTaskInTaskList(
-        name,
-        desc,
-        getState().get('taskList').get('taskList')
-      );
+    dispatch({
+      type: ADD_TASK_LIST,
+    });
 
-      updateTaskListAPI(updatedTaskList.toJS())
-        .then(response => {
-          if (response.status === 'success') {
-            dispatch({
-              type: ADD_TASK_LIST_SUCCESS,
-              payload: {
-                updatedTaskList,
-              },
-            });
-          } else {
-            dispatch({
-              type: ADD_TASK_LIST_FAILURE,
-            });
-          }
-        })
-        .catch(error => {
+    const updatedTaskList = addNewTaskInTaskList(
+      name,
+      description,
+      getState().get('taskList').get('taskList')
+    );
+
+    updateTaskListAPI(updatedTaskList.toJS())
+      .then(response => {
+        if (response.status === 'success') {
           dispatch({
-            type: ADD_TASK_LIST_FAILURE,
-            payload: { error },
-          });
-        });
-    } else {
-      dispatch({
-        type: ADD_ITEM,
-      });
-      const updatedTaskList = addItemInATask(
-        name,
-        taskId,
-        getState().get('taskList').get('taskList')
-      );
-
-      updateTaskListAPI(updatedTaskList.toJS())
-        .then(response => {
-          if (response.status === 'success') {
-            dispatch({
-              type: ADD_ITEM_SUCCESS,
-              payload: {
-                updatedTaskList,
-              },
-            });
-          } else {
-            dispatch({
-              type: ADD_ITEM_FAILURE,
-            });
-          }
-        })
-        .catch(error => {
-          dispatch({
-            type: ADD_ITEM_FAILURE,
-            payload: { error },
-          });
-        });
-    }
-  };
-};
-
-const modalDeleteAction = (modalType, taskId, itemId) => {
-  return (dispatch, getState) => {
-    if (modalType === MODAL_TYPE.DELETE_TASK_LIST) {
-      dispatch({
-        type: DELETE_TASK_LIST,
-      });
-      const updatedTaskList = deleteTaskFromTaskList(
-        taskId,
-        getState().get('taskList').get('taskList')
-      );
-
-      updateTaskListAPI(updatedTaskList.toJS())
-        .then(response => {
-          if (response.status === 'success') {
-            dispatch({
-              type: DELETE_TASK_LIST_SUCCESS,
-              payload: {
-                updatedTaskList,
-              },
-            });
-          } else {
-            dispatch({
-              type: DELETE_TASK_LIST_FAILURE,
-            });
-          }
-        })
-        .catch(error => {
-          dispatch({
-            type: DELETE_TASK_LIST_FAILURE,
+            type: ADD_TASK_LIST_SUCCESS,
             payload: {
-              error,
+              updatedTaskList,
             },
           });
-        });
-    } else {
-      dispatch({
-        type: DELETE_ITEM,
-      });
-      const updatedTaskList = deleteItemFromATask(
-        taskId,
-        itemId,
-        getState().get('taskList').get('taskList')
-      );
-      // console.log("UPDATED LIST --->",updatedTaskList.toJS());
-
-      updateTaskListAPI(updatedTaskList.toJS())
-        .then(response => {
-          if (response.status === 'success') {
-            dispatch({
-              type: DELETE_ITEM_SUCCESS,
-              payload: {
-                updatedTaskList,
-              },
-            });
-          } else {
-            dispatch({
-              type: DELETE_ITEM_FAILURE,
-            });
-          }
-        })
-        .catch(error => {
+        } else {
           dispatch({
-            type: DELETE_ITEM_FAILURE,
-            payload: { error },
+            type: ADD_TASK_LIST_FAILURE,
           });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: ADD_TASK_LIST_FAILURE,
+          payload: { error },
         });
-    }
+      });
   };
 };
 
 const addTaskList = () => ({
-  type: ADD_TASK_LIST,
+  type: SHOW_MODAL,
   payload: {
-    modalType: MODAL_TYPE.ADD_TASK_LIST,
+    title: 'Add a Task in the Task List',
+    showNameInput: true,
+    showDescriptionInput: true,
+    primaryActionName: 'Add',
+    primaryActionCallback: createTaskList,
+    secondaryActionName: 'Cancel',
+    secondaryActionCallback: null,
   },
 });
 
-const deleteTaskList = () => ({
-  type: DELETE_TASK_LIST,
+const removeTaskList = taskId => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: DELETE_TASK_LIST,
+    });
+
+    const updatedTaskList = deleteTaskFromTaskList(
+      taskId,
+      getState().get('taskList').get('taskList')
+    );
+
+    updateTaskListAPI(updatedTaskList.toJS())
+      .then(response => {
+        if (response.status === 'success') {
+          dispatch({
+            type: DELETE_TASK_LIST_SUCCESS,
+            payload: {
+              updatedTaskList,
+            },
+          });
+        } else {
+          dispatch({
+            type: DELETE_TASK_LIST_FAILURE,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: DELETE_TASK_LIST_FAILURE,
+          payload: {
+            error,
+          },
+        });
+      });
+  };
+};
+
+const deleteTaskList = (taskId, taskName) => ({
+  type: SHOW_MODAL,
   payload: {
-    modalType: MODAL_TYPE.DELETE_TASK_LIST,
+    title: `Are you sure, you want to delete task ${taskName}?`,
+    showNameInput: false,
+    showDescriptionInput: false,
+    primaryActionName: 'Delete',
+    primaryActionCallback: removeTaskList.bind(null, taskId),
+    secondaryActionName: 'Cancel',
+    secondaryActionCallback: null,
+  },
+});
+
+const removeItem = (taskId, itemId) => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: DELETE_ITEM,
+    });
+
+    const updatedTaskList = deleteItemFromATask(
+      taskId,
+      itemId,
+      getState().get('taskList').get('taskList')
+    );
+
+    updateTaskListAPI(updatedTaskList.toJS())
+      .then(response => {
+        if (response.status === 'success') {
+          dispatch({
+            type: DELETE_ITEM_SUCCESS,
+            payload: {
+              updatedTaskList,
+            },
+          });
+        } else {
+          dispatch({
+            type: DELETE_ITEM_FAILURE,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: DELETE_ITEM_FAILURE,
+          payload: { error },
+        });
+      });
+  };
+};
+
+const deleteItem = (taskId, taskName, itemId, itemName) => ({
+  type: SHOW_MODAL,
+  payload: {
+    title: `Are you sure, you want to delete item ${itemName} from task ${taskName}?`,
+    showNameInput: false,
+    showDescriptionInput: false,
+    primaryActionName: 'Delete',
+    primaryActionCallback: removeItem.bind(null, taskId, itemId),
+    secondaryActionName: 'Cancel',
+    secondaryActionCallback: null,
+  },
+});
+
+const createItem = (taskId, name) => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: ADD_ITEM,
+    });
+
+    const updatedTaskList = addItemInATask(
+      name,
+      taskId,
+      getState().get('taskList').get('taskList')
+    );
+
+    updateTaskListAPI(updatedTaskList.toJS())
+      .then(response => {
+        if (response.status === 'success') {
+          dispatch({
+            type: ADD_ITEM_SUCCESS,
+            payload: {
+              updatedTaskList,
+            },
+          });
+        } else {
+          dispatch({
+            type: ADD_ITEM_FAILURE,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: ADD_ITEM_FAILURE,
+          payload: { error },
+        });
+      });
+  };
+};
+
+const addItem = (taskName, taskId) => ({
+  type: SHOW_MODAL,
+  payload: {
+    title: `Add a Item in the Task ${taskName}`,
+    showNameInput: true,
+    showDescriptionInput: false,
+    primaryActionName: 'Add',
+    primaryActionCallback: createItem.bind(null, taskId),
+    secondaryActionName: 'Cancel',
+    secondaryActionCallback: null,
   },
 });
 
@@ -228,7 +272,7 @@ const draggedTask = (prevTaskId, prevItemId, newTaskId) => {
       type: DRAGGED_TASK,
     });
 
-    const newState = swapItem(
+    const newState = moveItemToAnotherTask(
       prevTaskId,
       prevItemId,
       newTaskId,
@@ -264,8 +308,8 @@ export {
   showModal,
   hideModal,
   addTaskList,
+  addItem,
   deleteTaskList,
+  deleteItem,
   draggedTask,
-  modalAddAction,
-  modalDeleteAction,
 };

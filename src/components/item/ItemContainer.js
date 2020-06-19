@@ -1,8 +1,7 @@
 import React from 'react';
 import Item from './Item';
 import { connect } from 'react-redux';
-import { showModal } from '../../store/actions';
-import { MODAL_TYPE } from '../../CONSTANTS';
+import { deleteItem } from '../../store/actions';
 
 const ItemContainer = props => {
   return <Item {...props} />;
@@ -11,10 +10,8 @@ const ItemContainer = props => {
 const mapDispatchToProps = dispatch => {
   return {
     actions: {
-      deleteItemHandler: (taskId, itemId) =>
-        dispatch(
-          showModal({ modalType: MODAL_TYPE.DELETE_ITEM, taskId, itemId })
-        ),
+      deleteItemHandler: (taskId, taskName, itemId, itemName) =>
+        dispatch(deleteItem(taskId, taskName, itemId, itemName)),
     },
   };
 };
