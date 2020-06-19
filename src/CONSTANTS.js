@@ -1,0 +1,6 @@
+export const MODAL_TYPE = {
+  ADD_TASK_LIST: 1,
+  ADD_ITEM: 2,
+  DELETE_TASK_LIST: 3,
+  DELETE_ITEM: 4,
+};

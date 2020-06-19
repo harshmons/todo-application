@@ -1,0 +1,33 @@
+{
+  "taskList":[
+  {
+    "name":"To Do",
+    "id":"L1",
+    "description":"Sample Description",
+    "items":[
+      {"name":"Sample 1","id":"L1_I1"},
+      {"name":"Sample 2","id":"L1_I2"},
+      {"name":"Sample 3","id":"L1_I3"}
+    ]
+  },
+  {
+    "name":"In Progress",
+    "id":"L2",
+    "description":"Sample Description",
+    "items":[
+      {"name":"Sample 1","id":"L2_I1"},
+      {"name":"Sample 2","id":"L2_I2"},
+      {"name":"Sample 3","id":"L2_I3"}
+    ]
+  },
+  {
+    "name":"Done",
+    "id":"L3",
+    "description":"Sample Description",
+    "items":[
+      {"name":"Sample 1","id":"L3_I1"},
+      {"name":"Sample 2","id":"L3_I2"},
+      {"name":"Sample 3","id":"L3_I3"}
+    ]
+  }
+]}

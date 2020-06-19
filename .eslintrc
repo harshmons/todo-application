@@ -1,0 +1,45 @@
+{
+    "root": true,
+    "env": {
+        "browser": true,
+        "es6": true,
+        "jest": true,
+        "node": true
+    },
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": 2018
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:react/recommended",
+        // "plugin:react-hooks/recommended",
+        "plugin:prettier/recommended",
+        "plugin:jest/recommended"
+    ],
+    "rules": {
+        /**** JEST RULES ****/
+        "jest/no-if":"error",
+        "jest/consistent-test-it":"error",
+        "jest/lowercase-name":"error",
+        "jest/prefer-called-with":"error",
+        "jest/prefer-spy-on":"error",
+        "jest/prefer-strict-equal":"error",
+        "jest/require-top-level-describe":"error",
+        "jest/valid-title": "error",
+        /**** REACT RULES ****/
+        "react/jsx-max-props-per-line": [
+            2,
+            {
+                "when": "multiline",
+                "maximum": 1
+            }
+        ],
+        "react/prop-types":"off"
+    },
+    "globals": {
+        "process": true
+    }
+}

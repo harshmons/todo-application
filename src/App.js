@@ -1,26 +1,20 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import TaskListContainer from './components/task_list/TaskListContainer';
+import useStyles from './App.styles';
+import ModalContainer from './components/modal/ModalContainer';
+import HeaderContainer from './components/header/HeaderContainer';
 
-function App() {
+const App = () => {
+  const classes = useStyles();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <ModalContainer />
+      <HeaderContainer />
+      <div className={classes.taskListContainer}>
+        <TaskListContainer />
+      </div>
+    </React.Fragment>
   );
-}
+};
 
 export default App;
