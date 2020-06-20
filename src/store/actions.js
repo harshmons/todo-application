@@ -5,40 +5,40 @@ import {
   SHOW_MODAL,
   HIDE_MODAL,
   ADD_TASK_LIST,
-  ADD_ITEM,
+  ADD_TASK,
   DELETE_TASK_LIST,
-  DELETE_ITEM,
+  DELETE_TASK,
   DRAGGED_TASK,
   DRAGGED_TASK_FAILURE,
   DRAGGED_TASK_SUCCESS,
   ADD_TASK_LIST_SUCCESS,
   ADD_TASK_LIST_FAILURE,
-  ADD_ITEM_SUCCESS,
-  ADD_ITEM_FAILURE,
+  ADD_TASK_SUCCESS,
+  ADD_TASK_FAILURE,
   DELETE_TASK_LIST_SUCCESS,
   DELETE_TASK_LIST_FAILURE,
-  DELETE_ITEM_SUCCESS,
-  DELETE_ITEM_FAILURE,
+  DELETE_TASK_SUCCESS,
+  DELETE_TASK_FAILURE,
 } from './action_types';
 import {
-  getTaskList as getTaskListApi,
-  updateTaskList as updateTaskListAPI,
+  getTaskLists as getTaskListsApi,
+  updateTaskLists as updateTaskListsAPI,
 } from '../services/api';
 import {
-  moveItemToAnotherTask,
+  moveTaskToAnotherTaskList,
   addNewTaskInTaskList,
-  addItemInATask,
-  deleteTaskFromTaskList,
-  deleteItemFromATask,
+  addTaskInATaskList,
+  deleteTaskList as deleteTaskListHelper,
+  deleteTask as deleteTaskHelper,
 } from '../utils';
 
-const getTaskList = () => {
+const getTaskLists = () => {
   return dispatch => {
     dispatch({
       type: GET_TASK_LIST,
     });
 
-    getTaskListApi()
+    getTaskListsApi()
       .then(d => {
         return dispatch({
           type: GET_TASK_LIST_SUCCESS,
@@ -54,13 +54,13 @@ const getTaskList = () => {
   };
 };
 
-const showModal = ({ modalType, taskId, itemId }) => {
+const showModal = ({ modalType, taskListId, taskId }) => {
   return {
     type: SHOW_MODAL,
     payload: {
       modalType,
+      taskListId,
       taskId,
-      itemId,
     },
   };
 };
@@ -69,25 +69,24 @@ const hideModal = () => ({
   type: HIDE_MODAL,
 });
 
-const createTaskList = (name, description) => {
+const createTaskList = name => {
   return (dispatch, getState) => {
     dispatch({
       type: ADD_TASK_LIST,
     });
 
-    const updatedTaskList = addNewTaskInTaskList(
+    const updatedTaskLists = addNewTaskInTaskList(
       name,
-      description,
-      getState().get('taskList').get('taskList')
+      getState().get('taskLists').get('taskLists')
     );
 
-    updateTaskListAPI(updatedTaskList.toJS())
+    updateTaskListsAPI(updatedTaskLists.toJS())
       .then(response => {
         if (response.status === 'success') {
           dispatch({
             type: ADD_TASK_LIST_SUCCESS,
             payload: {
-              updatedTaskList,
+              updatedTaskLists,
             },
           });
         } else {
@@ -108,9 +107,8 @@ const createTaskList = (name, description) => {
 const addTaskList = () => ({
   type: SHOW_MODAL,
   payload: {
-    title: 'Add a Task in the Task List',
+    title: 'Add a Task List',
     showNameInput: true,
-    showDescriptionInput: true,
     primaryActionName: 'Add',
     primaryActionCallback: createTaskList,
     secondaryActionName: 'Cancel',
@@ -124,18 +122,18 @@ const removeTaskList = taskId => {
       type: DELETE_TASK_LIST,
     });
 
-    const updatedTaskList = deleteTaskFromTaskList(
+    const updatedTaskLists = deleteTaskListHelper(
       taskId,
-      getState().get('taskList').get('taskList')
+      getState().get('taskLists').get('taskLists')
     );
 
-    updateTaskListAPI(updatedTaskList.toJS())
+    updateTaskListsAPI(updatedTaskLists.toJS())
       .then(response => {
         if (response.status === 'success') {
           dispatch({
             type: DELETE_TASK_LIST_SUCCESS,
             payload: {
-              updatedTaskList,
+              updatedTaskLists,
             },
           });
         } else {
@@ -159,9 +157,8 @@ const deleteTaskList = (taskName, taskId) => ({
   type: SHOW_MODAL,
   payload: {
     title: 'Warning',
-    message: `Are you sure, you want to delete task ${taskName}?`,
+    message: `Are you sure, you want to delete task list <b>${taskName}</b> ?`,
     showNameInput: false,
-    showDescriptionInput: false,
     primaryActionName: 'Delete',
     primaryActionCallback: removeTaskList.bind(null, taskId),
     secondaryActionName: 'Cancel',
@@ -169,125 +166,123 @@ const deleteTaskList = (taskName, taskId) => ({
   },
 });
 
-const removeItem = (taskId, itemId) => {
+const removeTask = (taskListId, taskId) => {
   return (dispatch, getState) => {
     dispatch({
-      type: DELETE_ITEM,
+      type: DELETE_TASK,
     });
 
-    const updatedTaskList = deleteItemFromATask(
+    const updatedTaskLists = deleteTaskHelper(
+      taskListId,
       taskId,
-      itemId,
-      getState().get('taskList').get('taskList')
+      getState().get('taskLists').get('taskLists')
     );
 
-    updateTaskListAPI(updatedTaskList.toJS())
+    updateTaskListsAPI(updatedTaskLists.toJS())
       .then(response => {
         if (response.status === 'success') {
           dispatch({
-            type: DELETE_ITEM_SUCCESS,
+            type: DELETE_TASK_SUCCESS,
             payload: {
-              updatedTaskList,
+              updatedTaskLists,
             },
           });
         } else {
           dispatch({
-            type: DELETE_ITEM_FAILURE,
+            type: DELETE_TASK_FAILURE,
           });
         }
       })
       .catch(error => {
         dispatch({
-          type: DELETE_ITEM_FAILURE,
+          type: DELETE_TASK_FAILURE,
           payload: { error },
         });
       });
   };
 };
 
-const deleteItem = (taskId, taskName, itemId, itemName) => ({
+const deleteTask = (taskListId, taskId, taskName) => ({
   type: SHOW_MODAL,
   payload: {
-    title: `Warning`,
-    message: `Are you sure, you want to delete item ${itemName} from task ${taskName}?`,
+    title: 'Warning',
+    message: `Are you sure, you want to delete task <b>${taskName}</b> ?`,
     showNameInput: false,
-    showDescriptionInput: false,
     primaryActionName: 'Delete',
-    primaryActionCallback: removeItem.bind(null, taskId, itemId),
+    primaryActionCallback: removeTask.bind(null, taskListId, taskId),
     secondaryActionName: 'Cancel',
     secondaryActionCallback: hideModal,
   },
 });
 
-const createItem = (taskId, name) => {
+const createTask = (taskListId, taskName) => {
   return (dispatch, getState) => {
     dispatch({
-      type: ADD_ITEM,
+      type: ADD_TASK,
     });
 
-    const updatedTaskList = addItemInATask(
-      name,
-      taskId,
-      getState().get('taskList').get('taskList')
+    const updatedTaskLists = addTaskInATaskList(
+      taskName,
+      taskListId,
+      getState().get('taskLists').get('taskLists')
     );
 
-    updateTaskListAPI(updatedTaskList.toJS())
+    updateTaskListsAPI(updatedTaskLists.toJS())
       .then(response => {
         if (response.status === 'success') {
           dispatch({
-            type: ADD_ITEM_SUCCESS,
+            type: ADD_TASK_SUCCESS,
             payload: {
-              updatedTaskList,
+              updatedTaskLists,
             },
           });
         } else {
           dispatch({
-            type: ADD_ITEM_FAILURE,
+            type: ADD_TASK_FAILURE,
           });
         }
       })
       .catch(error => {
         dispatch({
-          type: ADD_ITEM_FAILURE,
+          type: ADD_TASK_FAILURE,
           payload: { error },
         });
       });
   };
 };
 
-const addItem = (taskName, taskId) => ({
+const addTask = taskListId => ({
   type: SHOW_MODAL,
   payload: {
-    title: `Add a Item in the Task ${taskName}`,
+    title: `Add a Task`,
     showNameInput: true,
-    showDescriptionInput: false,
     primaryActionName: 'Add',
-    primaryActionCallback: createItem.bind(null, taskId),
+    primaryActionCallback: createTask.bind(null, taskListId),
     secondaryActionName: 'Cancel',
     secondaryActionCallback: hideModal,
   },
 });
 
-const draggedTask = (prevTaskId, prevItemId, newTaskId) => {
+const draggedTask = (prevTaskListId, taskId, newTaskListId) => {
   return (dispatch, getState) => {
     dispatch({
       type: DRAGGED_TASK,
     });
 
-    const newState = moveItemToAnotherTask(
-      prevTaskId,
-      prevItemId,
-      newTaskId,
-      getState().get('taskList')
+    const newState = moveTaskToAnotherTaskList(
+      prevTaskListId,
+      taskId,
+      newTaskListId,
+      getState().get('taskLists')
     );
 
-    updateTaskListAPI(newState.get('taskList').toJS())
+    updateTaskListsAPI(newState.get('taskLists').toJS())
       .then(response => {
         if (response.status === 'success') {
           dispatch({
             type: DRAGGED_TASK_SUCCESS,
             payload: {
-              updatedTaskList: newState.get('taskList'),
+              updatedTaskLists: newState.get('taskLists'),
             },
           });
         } else {
@@ -306,12 +301,12 @@ const draggedTask = (prevTaskId, prevItemId, newTaskId) => {
 };
 
 export {
-  getTaskList,
+  getTaskLists,
   showModal,
   hideModal,
   addTaskList,
-  addItem,
+  addTask,
   deleteTaskList,
-  deleteItem,
+  deleteTask,
   draggedTask,
 };

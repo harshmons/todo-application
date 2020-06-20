@@ -1,13 +1,13 @@
-export const getTaskList = () => {
-  return fetch('http://localhost:4000/getTaskList')
+export const getTaskLists = () => {
+  return fetch('http://localhost:4000/getTaskLists')
     .then(res => res.json())
-    .then(res => res.taskList);
+    .then(res => res.taskLists);
 };
 
-export const updateTaskList = payload => {
-  return fetch('http://localhost:4000/updateTaskList', {
+export const updateTaskLists = payload => {
+  return fetch('http://localhost:4000/updateTaskLists', {
     method: 'POST',
-    body: JSON.stringify({ taskList: payload }),
+    body: JSON.stringify({ taskLists: payload }),
     headers: {
       'Content-Type': 'application/json',
     },

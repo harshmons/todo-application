@@ -5,13 +5,13 @@ import {
   GET_TASK_LIST_FAILURE,
   DRAGGED_TASK_SUCCESS,
   ADD_TASK_LIST_SUCCESS,
-  ADD_ITEM_SUCCESS,
+  ADD_TASK_SUCCESS,
   DELETE_TASK_LIST_SUCCESS,
-  DELETE_ITEM_SUCCESS,
+  DELETE_TASK_SUCCESS,
 } from '../action_types';
 
 export const DEFAULT_STATE = Map({
-  taskList: List([]),
+  taskLists: List([]),
   fetching: false,
   error: null,
   showModal: false,
@@ -25,7 +25,7 @@ export default function (state = DEFAULT_STATE, action) {
     case GET_TASK_LIST_SUCCESS: {
       const { payload } = action;
       return state.merge({
-        taskList: fromJS(payload),
+        taskLists: fromJS(payload),
         fetching: false,
       });
     }
@@ -37,18 +37,18 @@ export default function (state = DEFAULT_STATE, action) {
       });
     }
     case DRAGGED_TASK_SUCCESS: {
-      const { updatedTaskList } = action.payload;
+      const { updatedTaskLists } = action.payload;
       return state.merge({
-        taskList: updatedTaskList,
+        taskLists: updatedTaskLists,
       });
     }
     case ADD_TASK_LIST_SUCCESS:
-    case ADD_ITEM_SUCCESS:
+    case ADD_TASK_SUCCESS:
     case DELETE_TASK_LIST_SUCCESS:
-    case DELETE_ITEM_SUCCESS: {
-      const { updatedTaskList } = action.payload;
+    case DELETE_TASK_SUCCESS: {
+      const { updatedTaskLists } = action.payload;
       return state.merge({
-        taskList: updatedTaskList,
+        taskLists: updatedTaskLists,
       });
     }
     default:

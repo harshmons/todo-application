@@ -11,9 +11,10 @@ export default makeStyles(theme => ({
     left: '30%',
   },
   header: {},
-  body: {},
+  body: {
+    marginBottom: theme.spacing(2),
+  },
   footer: {
-    textAlign: 'right',
     '& > *': {
       marginRight: theme.spacing(1),
     },

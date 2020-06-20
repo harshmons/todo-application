@@ -2,15 +2,17 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles({
   root: {
-    position: 'relative',
+    margin: '10px 0px',
+    padding: '10px 5px',
+    border: '2px solid lightgray',
+    cursor: 'grab',
+    display: 'flex',
   },
-  card: {
-    width: '100%',
+  task: {
+    wordBreak: 'break-word',
+    flexGrow: 1,
   },
-  cancel: {
+  delete: {
     cursor: 'pointer',
-    position: 'absolute',
-    top: '2px',
-    right: '2px',
   },
 });

@@ -7,7 +7,9 @@ export default makeStyles(theme => ({
   title: {
     flexGrow: 1,
   },
-  taskListContainer: {
-    margin: 20,
+  taskListsContainer: {
+    padding: 20,
+    minHeight: 'calc(100vh - 104px)',
+    background: 'darkcyan',
   },
 }));

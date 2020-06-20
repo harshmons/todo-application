@@ -3,14 +3,16 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import AddBoxIcon from '@material-ui/icons/AddBox';
+import EventNoteIcon from '@material-ui/icons/EventNote';
 import useStyles from './Header.styles';
 
 const Header = props => {
   const classes = useStyles();
   const { actions } = props;
   return (
-    <AppBar position="static">
+    <AppBar position="sticky">
       <Toolbar>
+        <EventNoteIcon />
         <Typography variant="h6" className={classes.title}>
           TODO Application
         </Typography>

@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux-immutable';
-import TaskListReducer from './TaskListReducer';
-import ModalReducer from './ModalReducer';
+import taskListsReducer from './taskListsReducer';
+import modalReducer from './modalReducer';
 
 export default combineReducers({
-  taskList: TaskListReducer,
-  modal: ModalReducer,
+  taskLists: taskListsReducer,
+  modal: modalReducer,
 });

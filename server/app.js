@@ -14,13 +14,13 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.get('/getTaskList', function (req, res) {
+app.get('/getTaskLists', function (req, res) {
   fs.readFile(__dirname + '/sample.json', 'utf8', function (err, data) {
     res.end(data);
   });
 });
 
-app.post('/updateTaskList', function (req, res) {
+app.post('/updateTaskLists', function (req, res) {
   const data = JSON.stringify(req.body);
   fs.writeFile(__dirname + '/sample.json', data, 'utf8', function (err, data) {
     res.end(

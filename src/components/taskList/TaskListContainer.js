@@ -1,42 +1,27 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import TaskList from './TaskList';
-import {
-  getTaskList,
-  draggedTask,
-  addItem,
-  deleteTaskList,
-} from '../../store/actions';
+import { connect } from 'react-redux';
+import { draggedTask, addTask, deleteTaskList } from '../../store/actions';
 
-class TaskListContainer extends React.Component {
-  componentDidMount() {
-    const { getTaskList } = this.props.actions;
-    getTaskList();
-  }
-
-  render() {
-    return <TaskList {...this.props} />;
-  }
-}
+const TaskListContainer = props => <TaskList {...props} />;
 
 const mapStateToProps = state => {
-  const taskList = state.get('taskList');
+  const taskLists = state.get('taskLists');
   return {
-    list: taskList.get('taskList').toJS(),
-    fetching: taskList.get('fetching'),
-    error: taskList.get('error'),
+    taskLists: taskLists.get('taskLists').toJS(),
+    fetching: taskLists.get('fetching'),
+    error: taskLists.get('error'),
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     actions: {
-      getTaskList: () => dispatch(getTaskList()),
-      addItemHandler: (taskName, taskId) => dispatch(addItem(taskName, taskId)),
-      deleteTaskHandler: (taskName, taskId) =>
+      addTaskHandler: taskListId => dispatch(addTask(taskListId)),
+      deleteTaskListHandler: (taskName, taskId) =>
         dispatch(deleteTaskList(taskName, taskId)),
-      draggedItemHandler: (prevTaskId, prevItemId, newTaskId) =>
-        dispatch(draggedTask(prevTaskId, prevItemId, newTaskId)),
+      draggedTaskHandler: (prevTaskListId, taskId, newTaskListId) =>
+        dispatch(draggedTask(prevTaskListId, taskId, newTaskListId)),
     },
   };
 };

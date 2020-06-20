@@ -11,7 +11,6 @@ const Modal = props => {
     title,
     message,
     showNameInput,
-    showDescriptionInput,
     primaryActionName,
     secondaryActionName,
     primaryActionCallback,
@@ -21,19 +20,16 @@ const Modal = props => {
   const classes = useStyles();
 
   const [name, setName] = React.useState('');
-  const [desc, setDesc] = React.useState('');
 
   const onClose = () => {
     setName('');
-    setDesc('');
     actions.hideModal();
   };
 
   const onPrimaryAction = () => {
     setName('');
-    setDesc('');
     actions.primaryActionHandler(
-      primaryActionCallback && primaryActionCallback.bind(null, name, desc)
+      primaryActionCallback && primaryActionCallback.bind(null, name)
     );
   };
 
@@ -46,31 +42,18 @@ const Modal = props => {
       <div className={classes.container}>
         <Typography variant="h5">{title}</Typography>
         <div className={classes.body}>
-          <Typography variant="h6">{message}</Typography>
+          <Typography
+            variant="body1"
+            dangerouslySetInnerHTML={{ __html: message }}
+          ></Typography>
           {showNameInput && (
-            <div>
-              <TextField
-                required
-                id="standard-required"
-                label="Name"
-                value={name}
-                onChange={e => setName(e.target.value)}
-              />
-            </div>
-          )}
-          {showDescriptionInput && (
-            <div>
-              <TextField
-                id="standard-multiline-flexible"
-                label="Description"
-                multiline
-                rowsMax={4}
-                value={desc}
-                onChange={e => {
-                  setDesc(e.target.value);
-                }}
-              />
-            </div>
+            <TextField
+              required
+              label="Name"
+              fullWidth
+              value={name}
+              onChange={e => setName(e.target.value)}
+            />
           )}
         </div>
         <div className={classes.footer}>

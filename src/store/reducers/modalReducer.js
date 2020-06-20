@@ -3,8 +3,8 @@ import {
   SHOW_MODAL,
   HIDE_MODAL,
   ADD_TASK_LIST_SUCCESS,
-  ADD_ITEM_SUCCESS,
-  DELETE_ITEM_SUCCESS,
+  ADD_TASK_SUCCESS,
+  DELETE_TASK_SUCCESS,
   DELETE_TASK_LIST_SUCCESS,
 } from '../action_types';
 
@@ -13,7 +13,6 @@ export const DEFAULT_STATE = Map({
   title: '',
   message: '',
   showNameInput: true,
-  showDescriptionInput: true,
   primaryActionName: '',
   primaryActionCallback: null,
   secondaryActionName: '',
@@ -30,9 +29,9 @@ export default function (state = DEFAULT_STATE, action) {
       });
     }
     case ADD_TASK_LIST_SUCCESS:
-    case ADD_ITEM_SUCCESS:
+    case ADD_TASK_SUCCESS:
     case DELETE_TASK_LIST_SUCCESS:
-    case DELETE_ITEM_SUCCESS:
+    case DELETE_TASK_SUCCESS:
     case HIDE_MODAL:
       return DEFAULT_STATE;
     default:
