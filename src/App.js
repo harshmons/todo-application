@@ -1,8 +1,8 @@
 import React from 'react';
 import TaskListsContainer from './components/taskLists';
 import useStyles from './App.styles';
-import ModalContainer from './components/modal/ModalContainer';
-import HeaderContainer from './components/header/HeaderContainer';
+import ModalContainer from './components/modal';
+import HeaderContainer from './components/header';
 
 const App = () => {
   const classes = useStyles();

@@ -4,8 +4,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
-import TaskContainer from '../task/TaskContainer';
 import CancelIcon from '@material-ui/icons/Cancel';
+import TaskContainer from '../task';
 import useStyles from './TaskList.styles';
 
 const allowDrop = e => {

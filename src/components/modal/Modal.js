@@ -1,9 +1,9 @@
 import React from 'react';
 import MuiModal from '@material-ui/core/Modal';
-import useStyles from './Modal.styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { Typography } from '@material-ui/core';
+import useStyles from './Modal.styles';
 
 const Modal = props => {
   const {

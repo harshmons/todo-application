@@ -10,6 +10,6 @@ export default makeStyles(theme => ({
   taskListsContainer: {
     padding: 20,
     minHeight: 'calc(100vh - 104px)',
-    background: 'darkcyan',
+    background: '#E6E6FA',
   },
 }));
