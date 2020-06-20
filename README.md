@@ -1,19 +1,7 @@
-## TODO Application
+# TODO Application
 This is a simple ToDo application with draggable feature.
 
-## Available Scripts
+### Steps to run the application
 
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
+1. Run `node app.js` inside `server` directory to run the backend server
+2. Run `npm start` inside the root directory to start the UI application

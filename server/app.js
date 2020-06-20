@@ -7,9 +7,7 @@ var cors = require('cors');
 app.use(bodyParser.json());
 
 var corsOptions = {
-  origin: 'http://localhost:3000',
-  // origin:"*",
-  // methods:["GET","POST"]
+  origin: '*',
 };
 
 app.use(cors(corsOptions));

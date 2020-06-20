@@ -1,49 +1,30 @@
 import { List, Map } from 'immutable';
 
-const moveTaskToAnotherTaskList = (
-  prevTaskListId,
-  taskId,
-  newTaskListId,
-  state
-) => {
-  let prevTaskIndex = 0;
-  const prevTask = state.get('taskLists').find((val, index) => {
-    if (val.get('id') === prevTaskListId) {
-      prevTaskIndex = index;
-      return true;
-    }
-    return false;
-  });
+const moveTask = (prevTaskListId, taskId, newTaskListId, state) => {
+  // Finding previous TaskList index
+  const prevTaskListIndex = state.findIndex(
+    val => val.get('id') === prevTaskListId
+  );
 
-  let newTaskIndex = 0;
-  state.get('taskLists').find((val, index) => {
-    if (val.get('id') === newTaskListId) {
-      newTaskIndex = index;
-      return true;
-    }
-    return false;
-  });
+  // Finding new TaskList index
+  const newTaskListIndex = state.findIndex(
+    val => val.get('id') === newTaskListId
+  );
 
-  let taskIndexOnPrevTaskList = 0;
-  const task = prevTask.get('taskList').find((val, index) => {
-    if (val.get('id') === taskId) {
-      taskIndexOnPrevTaskList = index;
-      return true;
-    }
-    return false;
-  });
+  // Finding Task
+  const task = state
+    .getIn([prevTaskListIndex, 'taskList'])
+    .find(val => val.get('id') === taskId);
 
-  const newTaskList = state
-    .getIn(['taskLists', newTaskIndex, 'taskList'])
-    .push(task);
-  const newState = state
-    .deleteIn(['taskLists', prevTaskIndex, 'taskList', taskIndexOnPrevTaskList])
-    .setIn(['taskLists', newTaskIndex, 'taskList'], newTaskList);
-
-  return newState;
+  // Deleting task from previous TaskList and pushing it to new TaskList
+  return state
+    .updateIn([prevTaskListIndex, 'taskList'], list =>
+      list.filter(val => val.get('id') !== taskId)
+    )
+    .updateIn([newTaskListIndex, 'taskList'], list => list.push(task));
 };
 
-const addNewTaskInTaskList = (name, state) => {
+const addTaskList = (name, state) => {
   return state.push(
     Map({
       name,
@@ -54,50 +35,26 @@ const addNewTaskInTaskList = (name, state) => {
 };
 
 const deleteTaskList = (taskId, state) => {
-  const taskIndex = state.findIndex(val => val.get('id') === taskId);
-  return state.delete(taskIndex);
+  return state.filter(val => val.get('id') !== taskId);
 };
 
-const addTaskInATaskList = (name, taskId, state) => {
-  let taskIndex = 0;
-  const task = state
-    .find((val, index) => {
-      if (val.get('id') === taskId) {
-        taskIndex = index;
-        return true;
-      }
-      return false;
-    })
-    .get('taskList')
-    .push(
+const addTask = (taskName, taskListId, state) => {
+  const taskListIndex = state.findIndex(val => val.get('id') === taskListId);
+  return state.updateIn([taskListIndex, 'taskList'], list =>
+    list.push(
       Map({
-        name,
+        name: taskName,
         id: new Date().getTime(),
       })
-    );
-  return state.setIn([taskIndex, 'taskList'], task);
+    )
+  );
 };
 
 const deleteTask = (taskListId, taskId, state) => {
-  let taskIndex = 0;
-  const task = state.find((val, index) => {
-    if (val.get('id') === taskListId) {
-      taskIndex = index;
-      return true;
-    }
-    return false;
-  });
-
-  const updatedTask = task
-    .get('taskList')
-    .filter(val => val.get('id') !== taskId);
-  return state.setIn([taskIndex, 'taskList'], updatedTask);
+  const taskListIndex = state.findIndex(val => val.get('id') === taskListId);
+  return state.updateIn([taskListIndex, 'taskList'], list =>
+    list.filter(val => val.get('id') !== taskId)
+  );
 };
 
-export {
-  moveTaskToAnotherTaskList,
-  addNewTaskInTaskList,
-  addTaskInATaskList,
-  deleteTaskList,
-  deleteTask,
-};
+export { moveTask, addTaskList, deleteTaskList, addTask, deleteTask };

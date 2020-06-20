@@ -25,9 +25,9 @@ import {
   updateTaskLists as updateTaskListsAPI,
 } from '../services/api';
 import {
-  moveTaskToAnotherTaskList,
-  addNewTaskInTaskList,
-  addTaskInATaskList,
+  moveTask,
+  addTaskList as addTaskListHelper,
+  addTask as addTaskHelper,
   deleteTaskList as deleteTaskListHelper,
   deleteTask as deleteTaskHelper,
 } from '../utils';
@@ -75,7 +75,7 @@ const createTaskList = name => {
       type: ADD_TASK_LIST,
     });
 
-    const updatedTaskLists = addNewTaskInTaskList(
+    const updatedTaskLists = addTaskListHelper(
       name,
       getState().get('taskLists').get('taskLists')
     );
@@ -221,7 +221,7 @@ const createTask = (taskListId, taskName) => {
       type: ADD_TASK,
     });
 
-    const updatedTaskLists = addTaskInATaskList(
+    const updatedTaskLists = addTaskHelper(
       taskName,
       taskListId,
       getState().get('taskLists').get('taskLists')
@@ -269,20 +269,20 @@ const draggedTask = (prevTaskListId, taskId, newTaskListId) => {
       type: DRAGGED_TASK,
     });
 
-    const newState = moveTaskToAnotherTaskList(
+    const updatedTaskLists = moveTask(
       prevTaskListId,
       taskId,
       newTaskListId,
-      getState().get('taskLists')
+      getState().get('taskLists').get('taskLists')
     );
 
-    updateTaskListsAPI(newState.get('taskLists').toJS())
+    updateTaskListsAPI(updatedTaskLists.toJS())
       .then(response => {
         if (response.status === 'success') {
           dispatch({
             type: DRAGGED_TASK_SUCCESS,
             payload: {
-              updatedTaskLists: newState.get('taskLists'),
+              updatedTaskLists,
             },
           });
         } else {

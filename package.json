@@ -14,6 +14,7 @@
     "react-redux": "^7.2.0",
     "react-scripts": "3.4.1",
     "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
     "redux-immutable": "^4.0.0",
     "redux-thunk": "^2.3.0"
   },
@@ -22,7 +23,7 @@
     "build": "cross-env SKIP_PREFLIGHT_CHECK=true react-scripts build",
     "test": "cross-env SKIP_PREFLIGHT_CHECK=true react-scripts test",
     "test:staged": "cross-env CI=true SKIP_PREFLIGHT_CHECK=true react-scripts test --findRelatedTests",
-    "lint": "eslint src"
+    "build:serve": "npm run build && serve -s build"
   },
   "browserslist": {
     "production": [
@@ -44,10 +45,12 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-jest": "^23.13.2",
     "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react-hooks": "^4.0.4",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
     "prettier": "^2.0.5",
-    "redux-mock-store": "^1.5.4"
+    "redux-mock-store": "^1.5.4",
+    "serve": "^11.3.2"
   },
   "husky": {
     "hooks": {

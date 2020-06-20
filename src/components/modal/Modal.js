@@ -22,15 +22,15 @@ const Modal = props => {
   const [name, setName] = React.useState('');
 
   const onClose = () => {
-    setName('');
     actions.hideModal();
+    setName('');
   };
 
   const onPrimaryAction = () => {
-    setName('');
     actions.primaryActionHandler(
       primaryActionCallback && primaryActionCallback.bind(null, name)
     );
+    setName('');
   };
 
   const onSecondaryAction = () => {
@@ -47,13 +47,21 @@ const Modal = props => {
             dangerouslySetInnerHTML={{ __html: message }}
           ></Typography>
           {showNameInput && (
-            <TextField
-              required
-              label="Name"
-              fullWidth
-              value={name}
-              onChange={e => setName(e.target.value)}
-            />
+            <form
+              onSubmit={e => {
+                e.preventDefault();
+                onPrimaryAction();
+              }}
+            >
+              <TextField
+                required
+                label="Name"
+                fullWidth
+                value={name}
+                onChange={e => setName(e.target.value)}
+                inputRef={ref => ref && ref.focus()}
+              />
+            </form>
           )}
         </div>
         <div className={classes.footer}>
