@@ -13,9 +13,9 @@ const Header = props => {
   return (
     <AppBar position="sticky">
       <Toolbar>
-        <EventNoteIcon />
+        <EventNoteIcon fontSize="large" />
         <Typography variant="h6" className={classes.title}>
-          TODO Application
+          ToDo Application
         </Typography>
         <AddBoxIcon
           className={classes.add}
@@ -28,9 +28,9 @@ const Header = props => {
 };
 
 Header.propTypes = {
-  actions: {
+  actions: PropTypes.shape({
     addTaskListHandler: PropTypes.func.isRequired,
-  },
+  }),
 };
 
 export default Header;

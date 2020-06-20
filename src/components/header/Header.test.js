@@ -40,7 +40,7 @@ describe('<Header />', () => {
     expect(child.type()).toBe(Typography);
     expect(child.prop('variant')).toBe('h6');
     expect(child.prop('className')).toMatch('title');
-    expect(child.text()).toBe('TODO Application');
+    expect(child.text()).toBe('ToDo Application');
   });
 
   it('should render 3rd child of <Toolbar /> as <AddBoxIcon /> with appropriate props', () => {
