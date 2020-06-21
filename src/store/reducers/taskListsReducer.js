@@ -1,8 +1,8 @@
 import { Map, List, fromJS } from 'immutable';
 import {
-  GET_TASK_LIST,
-  GET_TASK_LIST_SUCCESS,
-  GET_TASK_LIST_FAILURE,
+  GET_TASK_LISTS,
+  GET_TASK_LISTS_SUCCESS,
+  GET_TASK_LISTS_FAILURE,
   DRAGGED_TASK_SUCCESS,
   ADD_TASK_LIST_SUCCESS,
   ADD_TASK_SUCCESS,
@@ -19,17 +19,17 @@ export const DEFAULT_STATE = Map({
 
 export default function (state = DEFAULT_STATE, action) {
   switch (action.type) {
-    case GET_TASK_LIST: {
+    case GET_TASK_LISTS: {
       return state.merge({ fetching: true });
     }
-    case GET_TASK_LIST_SUCCESS: {
+    case GET_TASK_LISTS_SUCCESS: {
       const { payload } = action;
       return state.merge({
         taskLists: fromJS(payload),
         fetching: false,
       });
     }
-    case GET_TASK_LIST_FAILURE: {
+    case GET_TASK_LISTS_FAILURE: {
       const { payload } = action;
       return state.merge({
         error: payload,

@@ -38,7 +38,15 @@ const Modal = props => {
   };
 
   return (
-    <MuiModal open={show} onClose={onClose}>
+    <MuiModal
+      open={show}
+      onClose={onClose}
+      style={{
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+      }}
+    >
       <div className={classes.container}>
         <Typography variant="h5">{title}</Typography>
         <div className={classes.body}>

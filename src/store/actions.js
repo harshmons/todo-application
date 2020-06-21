@@ -1,7 +1,7 @@
 import {
-  GET_TASK_LIST,
-  GET_TASK_LIST_FAILURE,
-  GET_TASK_LIST_SUCCESS,
+  GET_TASK_LISTS,
+  GET_TASK_LISTS_FAILURE,
+  GET_TASK_LISTS_SUCCESS,
   SHOW_MODAL,
   HIDE_MODAL,
   ADD_TASK_LIST,
@@ -22,7 +22,7 @@ import {
 } from './action_types';
 import {
   getTaskLists as getTaskListsApi,
-  updateTaskLists as updateTaskListsAPI,
+  updateTaskLists as updateTaskListsApi,
 } from '../services/api';
 import {
   moveTask,
@@ -35,35 +35,29 @@ import {
 const getTaskLists = () => {
   return dispatch => {
     dispatch({
-      type: GET_TASK_LIST,
+      type: GET_TASK_LISTS,
     });
 
     getTaskListsApi()
       .then(d => {
         return dispatch({
-          type: GET_TASK_LIST_SUCCESS,
+          type: GET_TASK_LISTS_SUCCESS,
           payload: d,
         });
       })
       .catch(error =>
         dispatch({
-          type: GET_TASK_LIST_FAILURE,
+          type: GET_TASK_LISTS_FAILURE,
           payload: error,
         })
       );
   };
 };
 
-const showModal = ({ modalType, taskListId, taskId }) => {
-  return {
-    type: SHOW_MODAL,
-    payload: {
-      modalType,
-      taskListId,
-      taskId,
-    },
-  };
-};
+const showModal = payload => ({
+  type: SHOW_MODAL,
+  payload,
+});
 
 const hideModal = () => ({
   type: HIDE_MODAL,
@@ -80,7 +74,7 @@ const createTaskList = name => {
       getState().get('taskLists').get('taskLists')
     );
 
-    updateTaskListsAPI(updatedTaskLists.toJS())
+    updateTaskListsApi(updatedTaskLists.toJS())
       .then(response => {
         if (response.status === 'success') {
           dispatch({
@@ -127,7 +121,7 @@ const removeTaskList = taskId => {
       getState().get('taskLists').get('taskLists')
     );
 
-    updateTaskListsAPI(updatedTaskLists.toJS())
+    updateTaskListsApi(updatedTaskLists.toJS())
       .then(response => {
         if (response.status === 'success') {
           dispatch({
@@ -178,7 +172,7 @@ const removeTask = (taskListId, taskId) => {
       getState().get('taskLists').get('taskLists')
     );
 
-    updateTaskListsAPI(updatedTaskLists.toJS())
+    updateTaskListsApi(updatedTaskLists.toJS())
       .then(response => {
         if (response.status === 'success') {
           dispatch({
@@ -227,7 +221,7 @@ const createTask = (taskListId, taskName) => {
       getState().get('taskLists').get('taskLists')
     );
 
-    updateTaskListsAPI(updatedTaskLists.toJS())
+    updateTaskListsApi(updatedTaskLists.toJS())
       .then(response => {
         if (response.status === 'success') {
           dispatch({
@@ -276,7 +270,7 @@ const draggedTask = (prevTaskListId, taskId, newTaskListId) => {
       getState().get('taskLists').get('taskLists')
     );
 
-    updateTaskListsAPI(updatedTaskLists.toJS())
+    updateTaskListsApi(updatedTaskLists.toJS())
       .then(response => {
         if (response.status === 'success') {
           dispatch({
