@@ -58,7 +58,9 @@ const Task = props => {
         <CardHeader
           title={
             <React.Fragment>
-              {taskList.name}
+              <span className={classes.cardHeaderTitleText}>
+                {taskList.name}
+              </span>
               <EditIcon
                 className={classes.edit}
                 onClick={actions.editTaskNameHandler.bind(
@@ -71,7 +73,7 @@ const Task = props => {
           }
           classes={{
             content: classes.cardHeaderContent,
-            title: classes.cardHeaderTitle,
+            title: classes.cardHeaderTitleRoot,
           }}
         />
         <CardContent className={classes.cardContent}>

@@ -8,10 +8,14 @@ export default makeStyles({
   cardHeaderContent: {
     width: '100%',
   },
-  cardHeaderTitle: {
+  cardHeaderTitleRoot: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  cardHeaderTitleText: {
+    whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    width: '100%',
   },
   cardContent: {
     height: 250,

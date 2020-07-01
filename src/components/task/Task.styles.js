@@ -7,6 +7,7 @@ export default makeStyles({
     border: '2px solid lightgray',
     cursor: 'grab',
     display: 'flex',
+    alignItems: 'center',
   },
   task: {
     wordBreak: 'break-word',
