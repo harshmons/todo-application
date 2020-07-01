@@ -11,15 +11,6 @@ import {
 
 const TaskListContainer = props => <TaskList {...props} />;
 
-const mapStateToProps = state => {
-  const taskLists = state.get('taskLists');
-  return {
-    taskLists: taskLists.get('taskLists').toJS(),
-    fetching: taskLists.get('fetching'),
-    error: taskLists.get('error'),
-  };
-};
-
 const mapDispatchToProps = dispatch => {
   return {
     actions: {
@@ -40,4 +31,4 @@ const mapDispatchToProps = dispatch => {
     },
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(TaskListContainer);
+export default connect(null, mapDispatchToProps)(TaskListContainer);

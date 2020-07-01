@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getTaskLists } from '../../store/actions';
+import withToJS from '../../hoc/withToJS';
 import TaskLists from './TaskLists';
 
 class TaskListsContainer extends React.Component {
@@ -17,7 +18,7 @@ class TaskListsContainer extends React.Component {
 const mapStateToProps = state => {
   const taskLists = state.get('taskLists');
   return {
-    taskLists: taskLists.get('taskLists').toJS(),
+    taskLists: taskLists.get('taskLists'),
     fetching: taskLists.get('fetching'),
     error: taskLists.get('error'),
   };
@@ -31,4 +32,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TaskListsContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withToJS(TaskListsContainer));
