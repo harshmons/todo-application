@@ -64,7 +64,7 @@ const Task = props => {
                 onClick={actions.editTaskNameHandler.bind(
                   null,
                   taskList.id,
-                  'testing11'
+                  taskList.name
                 )}
               />
             </React.Fragment>
