@@ -5,16 +5,34 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 import CancelIcon from '@material-ui/icons/Cancel';
+import EditIcon from '@material-ui/icons/Edit';
 import TaskContainer from '../task';
 import useStyles from './TaskList.styles';
 
 const allowDrop = e => {
   e.preventDefault();
 };
+
 const drop = (newTaskListId, callback, e) => {
-  const { taskListId, taskId } = JSON.parse(e.dataTransfer.getData('task'));
+  const { type, taskListId, ...rest } = JSON.parse(
+    e.dataTransfer.getData('dragTask')
+  );
+
   if (taskListId === newTaskListId) return;
-  callback(taskListId, taskId, newTaskListId);
+
+  if (type === 'task') {
+    const { taskId } = rest;
+    callback({ type, taskListId, taskId, newTaskListId });
+  } else {
+    callback({ type, taskListId, newTaskListId });
+  }
+};
+
+const drag = (taskListId, e) => {
+  e.dataTransfer.setData(
+    'dragTask',
+    JSON.stringify({ type: 'taskList', taskListId })
+  );
 };
 
 const Task = props => {
@@ -23,6 +41,8 @@ const Task = props => {
   return (
     <div
       onDragOver={allowDrop}
+      draggable
+      onDragStart={drag.bind(null, taskList.id)}
       onDrop={drop.bind(null, taskList.id, actions.draggedTaskHandler)}
       className={classes.root}
     >
@@ -36,7 +56,19 @@ const Task = props => {
           )}
         />
         <CardHeader
-          title={taskList.name}
+          title={
+            <React.Fragment>
+              {taskList.name}
+              <EditIcon
+                className={classes.edit}
+                onClick={actions.editTaskNameHandler.bind(
+                  null,
+                  taskList.id,
+                  'testing11'
+                )}
+              />
+            </React.Fragment>
+          }
           classes={{
             content: classes.cardHeaderContent,
             title: classes.cardHeaderTitle,

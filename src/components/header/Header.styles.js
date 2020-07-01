@@ -8,7 +8,8 @@ export default makeStyles(theme => ({
     flexGrow: 1,
     marginLeft: 5,
   },
-  add: {
+  icon: {
     cursor: 'pointer',
+    margin: '0px 5px',
   },
 }));

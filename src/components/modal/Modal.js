@@ -11,6 +11,7 @@ const Modal = props => {
     title,
     message,
     showNameInput,
+    nameInputValue,
     primaryActionName,
     secondaryActionName,
     primaryActionCallback,
@@ -20,6 +21,10 @@ const Modal = props => {
   const classes = useStyles();
 
   const [name, setName] = React.useState('');
+
+  React.useEffect(() => {
+    setName(nameInputValue);
+  }, [nameInputValue]);
 
   const onClose = () => {
     actions.hideModal();
@@ -48,7 +53,9 @@ const Modal = props => {
       }}
     >
       <div className={classes.container}>
-        <Typography variant="h5">{title}</Typography>
+        <Typography variant="h5" color="textPrimary">
+          {title}
+        </Typography>
         <div className={classes.body}>
           <Typography
             variant="body1"

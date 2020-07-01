@@ -12,7 +12,7 @@ export default makeStyles({
     wordBreak: 'break-word',
     flexGrow: 1,
   },
-  delete: {
+  icon: {
     cursor: 'pointer',
   },
 });

@@ -6,6 +6,8 @@ import {
   ADD_TASK_SUCCESS,
   DELETE_TASK_SUCCESS,
   DELETE_TASK_LIST_SUCCESS,
+  EDIT_TASK_LIST_NAME_SUCCESS,
+  EDIT_TASK_NAME_SUCCESS,
 } from '../action_types';
 
 export const DEFAULT_STATE = Map({
@@ -13,6 +15,7 @@ export const DEFAULT_STATE = Map({
   title: '',
   message: '',
   showNameInput: true,
+  nameInputValue: '',
   primaryActionName: '',
   primaryActionCallback: null,
   secondaryActionName: '',
@@ -32,6 +35,8 @@ export default function (state = DEFAULT_STATE, action) {
     case ADD_TASK_SUCCESS:
     case DELETE_TASK_LIST_SUCCESS:
     case DELETE_TASK_SUCCESS:
+    case EDIT_TASK_LIST_NAME_SUCCESS:
+    case EDIT_TASK_NAME_SUCCESS:
     case HIDE_MODAL:
       return DEFAULT_STATE;
     default:

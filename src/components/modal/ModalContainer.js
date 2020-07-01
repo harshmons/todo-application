@@ -14,6 +14,7 @@ const mapStateToProps = state => {
     title: modal.get('title'),
     message: modal.get('message'),
     showNameInput: modal.get('showNameInput'),
+    nameInputValue: modal.get('nameInputValue'),
     primaryActionName: modal.get('primaryActionName'),
     secondaryActionName: modal.get('secondaryActionName'),
     primaryActionCallback: modal.get('primaryActionCallback'),

@@ -19,6 +19,15 @@ import {
   DELETE_TASK_LIST_FAILURE,
   DELETE_TASK_SUCCESS,
   DELETE_TASK_FAILURE,
+  EDIT_TASK_LIST_NAME,
+  EDIT_TASK_LIST_NAME_SUCCESS,
+  EDIT_TASK_LIST_NAME_FAILURE,
+  EDIT_TASK_NAME,
+  EDIT_TASK_NAME_SUCCESS,
+  EDIT_TASK_NAME_FAILURE,
+  DRAGGED_TASK_LIST,
+  DRAGGED_TASK_LIST_SUCCESS,
+  DRAGGED_TASK_LIST_FAILURE,
 } from './action_types';
 import {
   getTaskLists as getTaskListsApi,
@@ -30,6 +39,9 @@ import {
   addTask as addTaskHelper,
   deleteTaskList as deleteTaskListHelper,
   deleteTask as deleteTaskHelper,
+  updateTaskListName as updateTaskListNameHelper,
+  updateTaskName as updateTaskNameHelper,
+  moveTaskList,
 } from '../utils';
 
 const getTaskLists = () => {
@@ -110,14 +122,65 @@ const addTaskList = () => ({
   },
 });
 
-const removeTaskList = taskId => {
+const editTaskListName = (taskListId, taskListName) => ({
+  type: SHOW_MODAL,
+  payload: {
+    title: 'Edit task list name',
+    showNameInput: true,
+    nameInputValue: taskListName,
+    primaryActionName: 'Update',
+    primaryActionCallback: updateTaskListName.bind(null, taskListId),
+    secondaryActionName: 'Cancel',
+    secondaryActionCallback: hideModal,
+  },
+});
+
+const updateTaskListName = (taskListId, taskListName) => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: EDIT_TASK_LIST_NAME,
+    });
+
+    const updatedTaskLists = updateTaskListNameHelper(
+      taskListId,
+      taskListName,
+      getState().get('taskLists').get('taskLists')
+    );
+
+    updateTaskListsApi(updatedTaskLists.toJS())
+      .then(response => {
+        if (response.status === 'success') {
+          dispatch({
+            type: EDIT_TASK_LIST_NAME_SUCCESS,
+            payload: {
+              updatedTaskLists,
+            },
+          });
+        } else {
+          dispatch({
+            type: EDIT_TASK_LIST_NAME_FAILURE,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: DELETE_TASK_LIST_FAILURE,
+          payload: {
+            error,
+          },
+        });
+      });
+  };
+};
+
+const removeTaskList = taskListId => {
   return (dispatch, getState) => {
     dispatch({
       type: DELETE_TASK_LIST,
     });
 
     const updatedTaskLists = deleteTaskListHelper(
-      taskId,
+      taskListId,
       getState().get('taskLists').get('taskLists')
     );
 
@@ -147,14 +210,14 @@ const removeTaskList = taskId => {
   };
 };
 
-const deleteTaskList = (taskName, taskId) => ({
+const deleteTaskList = (taskName, taskListId) => ({
   type: SHOW_MODAL,
   payload: {
     title: 'Warning',
     message: `Are you sure, you want to delete task list <b>${taskName}</b> ?`,
     showNameInput: false,
     primaryActionName: 'Delete',
-    primaryActionCallback: removeTaskList.bind(null, taskId),
+    primaryActionCallback: removeTaskList.bind(null, taskListId),
     secondaryActionName: 'Cancel',
     secondaryActionCallback: hideModal,
   },
@@ -209,6 +272,57 @@ const deleteTask = (taskListId, taskId, taskName) => ({
   },
 });
 
+const editTaskName = (taskListId, taskId, taskName) => ({
+  type: SHOW_MODAL,
+  payload: {
+    title: 'Edit task name',
+    message: '',
+    showNameInput: true,
+    nameInputValue: taskName,
+    primaryActionName: 'Update',
+    primaryActionCallback: updateTaskName.bind(null, taskListId, taskId),
+    secondaryActionName: 'Cancel',
+    secondaryActionCallback: hideModal,
+  },
+});
+
+const updateTaskName = (taskListId, taskId, taskName) => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: EDIT_TASK_NAME,
+    });
+
+    const updatedTaskLists = updateTaskNameHelper(
+      taskListId,
+      taskId,
+      taskName,
+      getState().get('taskLists').get('taskLists')
+    );
+
+    updateTaskListsApi(updatedTaskLists.toJS())
+      .then(response => {
+        if (response.status === 'success') {
+          dispatch({
+            type: EDIT_TASK_NAME_SUCCESS,
+            payload: {
+              updatedTaskLists,
+            },
+          });
+        } else {
+          dispatch({
+            type: EDIT_TASK_NAME_FAILURE,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: EDIT_TASK_NAME_FAILURE,
+          payload: { error },
+        });
+      });
+  };
+};
+
 const createTask = (taskListId, taskName) => {
   return (dispatch, getState) => {
     dispatch({
@@ -257,14 +371,14 @@ const addTask = taskListId => ({
   },
 });
 
-const draggedTask = (prevTaskListId, taskId, newTaskListId) => {
+const draggedTask = (taskListId, taskId, newTaskListId) => {
   return (dispatch, getState) => {
     dispatch({
       type: DRAGGED_TASK,
     });
 
     const updatedTaskLists = moveTask(
-      prevTaskListId,
+      taskListId,
       taskId,
       newTaskListId,
       getState().get('taskLists').get('taskLists')
@@ -294,6 +408,42 @@ const draggedTask = (prevTaskListId, taskId, newTaskListId) => {
   };
 };
 
+const draggedTaskList = (taskListId, newTaskListId) => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: DRAGGED_TASK_LIST,
+    });
+
+    const updatedTaskLists = moveTaskList(
+      taskListId,
+      newTaskListId,
+      getState().get('taskLists').get('taskLists')
+    );
+
+    updateTaskListsApi(updatedTaskLists.toJS())
+      .then(response => {
+        if (response.status === 'success') {
+          dispatch({
+            type: DRAGGED_TASK_LIST_SUCCESS,
+            payload: {
+              updatedTaskLists,
+            },
+          });
+        } else {
+          dispatch({
+            type: DRAGGED_TASK_LIST_FAILURE,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: DRAGGED_TASK_FAILURE,
+          payload: { error },
+        });
+      });
+  };
+};
+
 export {
   getTaskLists,
   showModal,
@@ -303,4 +453,7 @@ export {
   deleteTaskList,
   deleteTask,
   draggedTask,
+  editTaskListName,
+  editTaskName,
+  draggedTaskList,
 };

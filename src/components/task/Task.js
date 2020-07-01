@@ -1,10 +1,15 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import useStyles from './Task.styles';
 
 const drag = (taskId, taskListId, e) => {
-  e.dataTransfer.setData('task', JSON.stringify({ taskId, taskListId }));
+  e.dataTransfer.setData(
+    'dragTask',
+    JSON.stringify({ type: 'task', taskId, taskListId })
+  );
+  e.stopPropagation();
 };
 
 const Task = props => {
@@ -19,6 +24,15 @@ const Task = props => {
       <Typography variant="body2" color="textPrimary" className={classes.task}>
         {task.name}
       </Typography>
+      <EditIcon
+        onClick={actions.editTaskNameHandler.bind(
+          null,
+          taskListId,
+          task.id,
+          task.name
+        )}
+        className={classes.icon}
+      />
       <DeleteIcon
         onClick={actions.deleteTaskHandler.bind(
           null,
@@ -26,7 +40,7 @@ const Task = props => {
           task.id,
           task.name
         )}
-        className={classes.delete}
+        className={classes.icon}
       />
     </div>
   );

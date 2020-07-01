@@ -8,6 +8,9 @@ import {
   ADD_TASK_SUCCESS,
   DELETE_TASK_LIST_SUCCESS,
   DELETE_TASK_SUCCESS,
+  EDIT_TASK_LIST_NAME_SUCCESS,
+  EDIT_TASK_NAME_SUCCESS,
+  DRAGGED_TASK_LIST_SUCCESS,
 } from '../action_types';
 
 export const DEFAULT_STATE = Map({
@@ -36,15 +39,13 @@ export default function (state = DEFAULT_STATE, action) {
         fetching: false,
       });
     }
-    case DRAGGED_TASK_SUCCESS: {
-      const { updatedTaskLists } = action.payload;
-      return state.merge({
-        taskLists: updatedTaskLists,
-      });
-    }
+    case DRAGGED_TASK_LIST_SUCCESS:
+    case DRAGGED_TASK_SUCCESS:
     case ADD_TASK_LIST_SUCCESS:
     case ADD_TASK_SUCCESS:
     case DELETE_TASK_LIST_SUCCESS:
+    case EDIT_TASK_LIST_NAME_SUCCESS:
+    case EDIT_TASK_NAME_SUCCESS:
     case DELETE_TASK_SUCCESS: {
       const { updatedTaskLists } = action.payload;
       return state.merge({

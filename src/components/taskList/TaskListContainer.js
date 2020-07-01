@@ -1,7 +1,13 @@
 import React from 'react';
 import TaskList from './TaskList';
 import { connect } from 'react-redux';
-import { draggedTask, addTask, deleteTaskList } from '../../store/actions';
+import {
+  draggedTask,
+  addTask,
+  deleteTaskList,
+  editTaskListName,
+  draggedTaskList,
+} from '../../store/actions';
 
 const TaskListContainer = props => <TaskList {...props} />;
 
@@ -18,10 +24,19 @@ const mapDispatchToProps = dispatch => {
   return {
     actions: {
       addTaskHandler: taskListId => dispatch(addTask(taskListId)),
+      editTaskNameHandler: (taskListId, taskListName) =>
+        dispatch(editTaskListName(taskListId, taskListName)),
       deleteTaskListHandler: (taskName, taskId) =>
         dispatch(deleteTaskList(taskName, taskId)),
-      draggedTaskHandler: (prevTaskListId, taskId, newTaskListId) =>
-        dispatch(draggedTask(prevTaskListId, taskId, newTaskListId)),
+      draggedTaskHandler: ({ type, ...rest }) => {
+        if (type === 'task') {
+          const { taskListId, taskId, newTaskListId } = rest;
+          dispatch(draggedTask(taskListId, taskId, newTaskListId));
+        } else {
+          const { taskListId, newTaskListId } = rest;
+          dispatch(draggedTaskList(taskListId, newTaskListId));
+        }
+      },
     },
   };
 };
